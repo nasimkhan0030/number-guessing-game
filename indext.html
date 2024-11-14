@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Number Guessing Game</title>
+  <style>
+    body {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 500px;
+      margin: 0;
+      background-color: #f2f2f2;
+    }
+    .container {
+      text-align: center;
+      background: white;
+      padding: 30px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+    input[type="number"] {
+      padding: 10px;
+      width: 70px;
+      text-align: center;
+      margin-right: 10px;
+      border-radius: 10px;
+    }
+    button {
+      padding: 10px 15px;
+      margin: 5px;
+      font-size: 16px;
+      border-radius: 10px;
+      background-color: green;
+      color: #f2f2f2;
+    }
+    #feedback {
+      margin-top: 10px;
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Number Guessing Game</h1>
+    <p>Guess a number between 1 and 100</p>
+    <input type="number" id="guessInput" min="1" max="100" placeholder="Enter guess" />
+    <button onclick="checkGuess()">Submit</button>
+    <button onclick="resetGame()">Restart Game</button>
+    <div id="feedback"></div>
+    <div id="remainingGuesses"></div>
+  </div>
+
+  <script>
+    let randomNumber;
+    let attemptsLeft;
+    const max=100;
+    const min=1;
+
+    function startGame() {
+      randomNumber = Math.floor(Math.random() * max) + min;
+      attemptsLeft = 10;
+      document.getElementById('feedback').textContent = '';
+      document.getElementById('remainingGuesses').textContent = `Attempts left: ${attemptsLeft}`;
+      document.getElementById('guessInput').value = '';
+    }
+
+    function checkGuess() {
+      const userGuess = parseInt(document.getElementById('guessInput').value);
+      
+      if (isNaN(userGuess) || userGuess < 1 || userGuess > 100) {
+        document.getElementById('feedback').textContent = "Please enter a valid number between 1 and 100.";
+        return;
+      }
+      else{
+        attemptsLeft--;
+        document.getElementById('remainingGuesses').textContent = `Attempts left: ${attemptsLeft}`;
+      }
+
+      
+      
+      if (userGuess === randomNumber) {
+        document.getElementById('feedback').textContent = "Congratulations! You guessed it!";
+      } else if (attemptsLeft === 0) {
+        document.getElementById('feedback').textContent = `Game Over! The correct number was ${randomNumber}.`;
+      } else if (userGuess > randomNumber) {
+        document.getElementById('feedback').textContent = "Too high!";
+      } else {
+        document.getElementById('feedback').textContent = "Too low!";
+      }
+      
+      if (userGuess === randomNumber || attemptsLeft === 0) {
+        document.getElementById('guessInput').disabled = true;
+      }
+    }
+
+    function resetGame() {
+      document.getElementById('guessInput').disabled = false;
+      startGame();
+    }
+
+    // Start the game for the first time
+    startGame();
+  </script>
+</body>
+</html>
